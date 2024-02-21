@@ -10,6 +10,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/stdlib"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"log"
 	"strconv"
@@ -24,7 +26,13 @@ func NewDataBase() DataBase {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
-	db, err := sql.Open("pgx", config.Config.DatabaseDSN)
+
+	conf, err := pgxpool.ParseConfig(config.Config.DatabaseDSN)
+	if err != nil {
+		log.Printf("[ParseConfig] %q", err)
+	}
+
+	db, err := sql.Open("pgx", stdlib.RegisterConnConfig(conf.ConnConfig))
 	if err != nil {
 		log.Printf("[Open DB] Не удалось установить соединение с базой данных: %q", err)
 	}
