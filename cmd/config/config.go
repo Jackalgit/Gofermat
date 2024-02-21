@@ -47,8 +47,6 @@ func ConfigLogger() {
 }
 
 func ConfigDatabaseDSN() {
-	//ps := fmt.Sprintf("host=%s port=%s dbname=%s sslmode=disable TimeZone=Europe/Moscow",
-	//	`localhost`, `5432`, `gofermat`)
 
 	flag.StringVar(&Config.DatabaseDSN, "d", "", "Database source name")
 
