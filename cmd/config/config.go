@@ -42,7 +42,7 @@ func ConfigDatabaseDSN() {
 
 	flag.StringVar(&Config.DatabaseDSN, "d", "", "Database source name")
 
-	if envDatabaseDSN := os.Getenv("DATABASE_URI"); envDatabaseDSN != "" {
+	if envDatabaseDSN := os.Getenv("DATABASE_DSN"); envDatabaseDSN != "" {
 		Config.DatabaseDSN = envDatabaseDSN
 	}
 

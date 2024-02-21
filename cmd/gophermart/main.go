@@ -10,7 +10,6 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"time"
 )
 
 func init() {
@@ -24,7 +23,9 @@ func init() {
 func main() {
 
 	flag.Parse()
-	fmt.Println(time.Now().Format(time.RFC3339))
+	ps := fmt.Sprintf("host=%s port=%s dbname=%s sslmode=disable TimeZone=Europe/Moscow",
+		`localhost`, `5432`, `gofermat`)
+	fmt.Println(ps)
 
 	if err := runServer(); err != nil {
 		log.Println("runServer ERROR: ", err)
