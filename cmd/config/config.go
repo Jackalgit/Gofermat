@@ -27,6 +27,16 @@ func ConfigServerPort() {
 
 }
 
+func ConfigAccrualSystem() {
+
+	flag.StringVar(&Config.AccrualSystem, "r", "http://localhost:8081", "System Accrual")
+
+	if envAccrualSystem := os.Getenv("ACCRUAL_SYSTEM_ADDRESS"); envAccrualSystem != "" {
+		Config.AccrualSystem = envAccrualSystem
+	}
+
+}
+
 func ConfigLogger() {
 	flag.StringVar(&Config.LogLevel, "l", "info", "log level")
 
@@ -43,16 +53,6 @@ func ConfigDatabaseDSN() {
 	flag.StringVar(&Config.DatabaseDSN, "d", "", "Database source name")
 
 	if envDatabaseDSN := os.Getenv("DATABASE_DSN"); envDatabaseDSN != "" {
-		Config.DatabaseDSN = envDatabaseDSN
-	}
-
-}
-
-func ConfigAccrualSystem() {
-
-	flag.StringVar(&Config.AccrualSystem, "r", "http://localhost:8081", "System Accrual")
-
-	if envDatabaseDSN := os.Getenv("ACCRUAL_SYSTEM_ADDRESS"); envDatabaseDSN != "" {
 		Config.DatabaseDSN = envDatabaseDSN
 	}
 
