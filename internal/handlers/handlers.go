@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/Jackalgit/Gofermat/cmd/config"
 	"github.com/Jackalgit/Gofermat/internal/database"
 	"github.com/Jackalgit/Gofermat/internal/jsondecoder"
@@ -56,9 +57,6 @@ func (g *GoferMat) Register(w http.ResponseWriter, r *http.Request) {
 	g.SetCookie(w, r, userID.String())
 
 	w.WriteHeader(http.StatusOK)
-
-	return
-
 }
 
 func (g *GoferMat) Login(w http.ResponseWriter, r *http.Request) {
@@ -92,9 +90,6 @@ func (g *GoferMat) Login(w http.ResponseWriter, r *http.Request) {
 	g.SetCookie(w, r, userID)
 
 	w.WriteHeader(http.StatusOK)
-
-	return
-
 }
 
 func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +132,6 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(responsListJSON)
 
@@ -179,16 +173,13 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 			} else {
-				log.Printf("[LoadOrderNum]", err)
+				log.Printf("[LoadOrderNum] %q", err)
 			}
 		}
 		w.WriteHeader(http.StatusAccepted)
 
 		return
 	}
-
-	return
-
 }
 
 func (g *GoferMat) Balance(w http.ResponseWriter, r *http.Request) {
@@ -228,9 +219,6 @@ func (g *GoferMat) Balance(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responsBalance)
-
-	return
-
 }
 
 func (g *GoferMat) Withdraw(w http.ResponseWriter, r *http.Request) {
@@ -294,7 +282,7 @@ func (g *GoferMat) Withdraw(w http.ResponseWriter, r *http.Request) {
 	if err := g.Storage.WithdrawUser(ctx, userID, numOrderInt, withdrawRequest.Sum); err != nil {
 		var UniqueOrderError *models.UniqueOrderError
 		if errors.As(err, &UniqueOrderError) {
-			if err.Error() == string(numOrderInt) {
+			if err.Error() == fmt.Sprint(numOrderInt) {
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
@@ -302,9 +290,6 @@ func (g *GoferMat) Withdraw(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-
-	return
-
 }
 
 func (g *GoferMat) Withdrawals(w http.ResponseWriter, r *http.Request) {
@@ -345,9 +330,6 @@ func (g *GoferMat) Withdrawals(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responsWithdrawals)
-
-	return
-
 }
 
 func (g *GoferMat) SetCookie(w http.ResponseWriter, r *http.Request, userID string) {

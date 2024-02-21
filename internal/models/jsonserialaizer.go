@@ -11,10 +11,10 @@ type Withdraw struct {
 }
 
 type OrderStatus struct {
-	NumOrder    string  `json:"num_order"`
-	Status      string  `json:"status"`
-	Accrual     float32 `json:"accrual"`
-	Uploaded_at string  `json:"uploaded_at"`
+	NumOrder   string  `json:"num_order"`
+	Status     string  `json:"status"`
+	Accrual    float32 `json:"accrual"`
+	UploadedAt string  `json:"uploaded_at"`
 }
 
 type ResponsLoyaltySystem struct {
@@ -29,7 +29,7 @@ type Balance struct {
 }
 
 type Withdrawals struct {
-	Order        string  `json:"order"`
-	Sum          float32 `json:"sum"`
-	Processed_at string  `json:"processed_at"`
+	Order       string  `json:"order"`
+	Sum         float32 `json:"sum"`
+	ProcessedAt string  `json:"processed_at"`
 }

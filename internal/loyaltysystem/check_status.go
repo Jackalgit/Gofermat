@@ -16,8 +16,8 @@ func CheckStatusOrder(orderList []models.OrderStatus) ([]models.OrderStatus, map
 	for _, v := range orderList {
 		if v.Status != "INVALID" || v.Status != "PROCESSED" {
 
-			UrlRequest := config.Config.AccrualSystem + "/api/orders/" + v.NumOrder
-			response, err := http.Get(UrlRequest)
+			URLRequest := config.Config.AccrualSystem + "/api/orders/" + v.NumOrder
+			response, err := http.Get(URLRequest)
 			if err != nil {
 				log.Printf("[Get], %q", err)
 				return nil, nil
@@ -28,6 +28,7 @@ func CheckStatusOrder(orderList []models.OrderStatus) ([]models.OrderStatus, map
 				log.Printf("[ResponsLoyaltySystem], %q", err)
 				return nil, nil
 			}
+			response.Body.Close()
 			if v.Status != responsLoyaltySystem.Status {
 				dictOrderStatusForUpdateDB[v.NumOrder] = models.OrderStatus{
 					Status:  responsLoyaltySystem.Status,
@@ -39,7 +40,7 @@ func CheckStatusOrder(orderList []models.OrderStatus) ([]models.OrderStatus, map
 
 		orderListCheckStatus = append(
 			orderListCheckStatus,
-			models.OrderStatus{NumOrder: v.NumOrder, Status: v.Status, Accrual: v.Accrual, Uploaded_at: v.Uploaded_at})
+			models.OrderStatus{NumOrder: v.NumOrder, Status: v.Status, Accrual: v.Accrual, UploadedAt: v.UploadedAt})
 	}
 
 	return orderListCheckStatus, dictOrderStatusForUpdateDB

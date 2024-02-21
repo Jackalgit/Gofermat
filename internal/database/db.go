@@ -141,7 +141,7 @@ func (d DataBase) LoadOrderNum(ctx context.Context, userID string, numOrder int)
 			return userIDUniqueOrderError
 
 		}
-		return fmt.Errorf("[ExecContext]", err)
+		return fmt.Errorf("[ExecContext] %q", err)
 	}
 
 	return nil
@@ -191,7 +191,7 @@ func (d DataBase) GetListOrder(ctx context.Context, userID string) []models.Orde
 
 	for rows.Next() {
 
-		err = rows.Scan(&orderInfo.NumOrder, &orderInfo.Status, &orderInfo.Accrual, &orderInfo.Uploaded_at)
+		err = rows.Scan(&orderInfo.NumOrder, &orderInfo.Status, &orderInfo.Accrual, &orderInfo.UploadedAt)
 		if err != nil {
 			log.Printf("[rows Scan] Не удалось собрать orderInfo: %q", err)
 			return nil
@@ -326,7 +326,7 @@ func (d DataBase) WithdrawalsUser(ctx context.Context, userID string) []models.W
 
 	for rows.Next() {
 
-		err = rows.Scan(&withdrawals.Order, &withdrawals.Sum, &withdrawals.Processed_at)
+		err = rows.Scan(&withdrawals.Order, &withdrawals.Sum, &withdrawals.ProcessedAt)
 		if err != nil {
 			log.Printf("[rows Scan] Не удалось собрать orderInfo: %q", err)
 			return nil
