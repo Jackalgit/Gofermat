@@ -23,6 +23,9 @@ func CheckStatusOrder(orderList []models.OrderStatus) ([]models.OrderStatus, map
 				return nil, nil
 			}
 			if response.StatusCode == 204 {
+				orderListCheckStatus = append(
+					orderListCheckStatus,
+					models.OrderStatus{NumOrder: v.NumOrder, Status: v.Status, Accrual: v.Accrual, UploadedAt: v.UploadedAt})
 				continue
 			}
 
