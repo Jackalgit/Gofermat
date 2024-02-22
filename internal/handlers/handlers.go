@@ -121,6 +121,7 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
+		log.Print(orderList)
 
 		orderListChekStatus, dictOrderStatusForUpdateDB := loyaltysystem.CheckStatusOrder(orderList)
 		log.Println(orderListChekStatus)
@@ -213,7 +214,6 @@ func (g *GoferMat) Balance(w http.ResponseWriter, r *http.Request) {
 	current := sumAccurual - sumSumPoint
 
 	balance := models.Balance{Current: current, Withdrawn: sumSumPoint}
-	log.Print(balance)
 
 	responsBalance, err := json.Marshal(balance)
 	if err != nil {
