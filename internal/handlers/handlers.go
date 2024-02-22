@@ -152,6 +152,7 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 		}
 
 		numOrderInt, err := strconv.Atoi(string(numOrder))
+		log.Println(numOrderInt)
 		if err != nil {
 			http.Error(w, "номер заказа не цифровой формат", http.StatusBadRequest)
 			return
@@ -209,6 +210,7 @@ func (g *GoferMat) Balance(w http.ResponseWriter, r *http.Request) {
 	sumSumPoint := g.Storage.SumWithdrawn(ctx, userID)
 
 	balance := models.Balance{Current: sumAccurual, Withdrawn: sumSumPoint}
+	log.Print(balance)
 
 	responsBalance, err := json.Marshal(balance)
 	if err != nil {
