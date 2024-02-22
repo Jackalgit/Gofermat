@@ -123,6 +123,7 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 		}
 
 		orderListChekStatus, dictOrderStatusForUpdateDB := loyaltysystem.CheckStatusOrder(orderList)
+		log.Println(orderListChekStatus)
 
 		g.Storage.UpdateOrderStatusInDB(ctx, dictOrderStatusForUpdateDB)
 
