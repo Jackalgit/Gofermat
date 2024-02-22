@@ -7,29 +7,29 @@ type Register struct {
 
 type Withdraw struct {
 	Order string  `json:"order"`
-	Sum   float32 `json:"sum"`
+	Sum   float64 `json:"sum"`
 }
 
 type OrderStatus struct {
 	NumOrder   string  `json:"num_order"`
 	Status     string  `json:"status"`
-	Accrual    float32 `json:"accrual"`
+	Accrual    float64 `json:"accrual"`
 	UploadedAt string  `json:"uploaded_at"`
 }
 
 type ResponsLoyaltySystem struct {
 	Order   string  `json:"order"`
 	Status  string  `json:"status"`
-	Accrual float32 `json:"accrual"`
+	Accrual float64 `json:"accrual"`
 }
 
 type Balance struct {
-	Current   float32 `json:"current"`
-	Withdrawn float32 `json:"withdrawn"`
+	Current   float64 `json:"current"`
+	Withdrawn float64 `json:"withdrawn"`
 }
 
 type Withdrawals struct {
 	Order       string  `json:"order"`
-	Sum         float32 `json:"sum"`
+	Sum         float64 `json:"sum"`
 	ProcessedAt string  `json:"processed_at"`
 }

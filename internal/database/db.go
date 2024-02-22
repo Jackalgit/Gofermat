@@ -115,11 +115,12 @@ func (d DataBase) LoginUser(ctx context.Context, login string) (string, string) 
 	if err != nil {
 		log.Printf("[row Scan] Не удалось прeобразовать данные: %q", err)
 	}
-	if hashPassInDB.Valid {
-		return userID, hashPassInDB.String
+
+	if !hashPassInDB.Valid {
+		return "", ""
 	}
 
-	return "", ""
+	return userID, hashPassInDB.String
 }
 
 func (d DataBase) LoadOrderNum(ctx context.Context, userID string, numOrder int) error {
@@ -171,11 +172,11 @@ func (d DataBase) GetUserIDtoNumOrder(ctx context.Context, numOrder int) string 
 		return ""
 	}
 
-	if userID.Valid {
-		return userID.String
+	if !userID.Valid {
+		return ""
 	}
 
-	return ""
+	return userID.String
 
 }
 
@@ -243,7 +244,7 @@ func (d DataBase) UpdateOrderStatusInDB(ctx context.Context, dictOrderStatus map
 
 }
 
-func (d DataBase) SumAccrual(ctx context.Context, userID string) float32 {
+func (d DataBase) SumAccrual(ctx context.Context, userID string) float64 {
 	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
 	defer cancel()
 
@@ -253,18 +254,22 @@ func (d DataBase) SumAccrual(ctx context.Context, userID string) float32 {
 		userID,
 	)
 
-	var sumAccurual float32
+	var sumAccurual sql.NullFloat64
 
 	err := row.Scan(&sumAccurual)
 	if err != nil {
 		log.Printf("[row Scan] Не удалось прeобразовать данные: %q", err)
 	}
 
-	return sumAccurual
+	if !sumAccurual.Valid {
+		return 0
+	}
+
+	return sumAccurual.Float64
 
 }
 
-func (d DataBase) SumWithdrawn(ctx context.Context, userID string) float32 {
+func (d DataBase) SumWithdrawn(ctx context.Context, userID string) float64 {
 	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
 	defer cancel()
 
@@ -273,17 +278,21 @@ func (d DataBase) SumWithdrawn(ctx context.Context, userID string) float32 {
 		"SELECT SUM(sumPoint) AS sum_sumPoint FROM userwithdraw WHERE userID = $1", userID,
 	)
 
-	var sumSumPoint float32
+	var sumSumPoint sql.NullFloat64
 	err := row.Scan(&sumSumPoint)
 	if err != nil {
 		log.Printf("[Scan] %v", err)
 	}
 
-	return sumSumPoint
+	if !sumSumPoint.Valid {
+		return 0
+	}
+
+	return sumSumPoint.Float64
 
 }
 
-func (d DataBase) WithdrawUser(ctx context.Context, userID string, numOrder int, sumPoint float32) error {
+func (d DataBase) WithdrawUser(ctx context.Context, userID string, numOrder int, sumPoint float64) error {
 
 	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
 	defer cancel()
