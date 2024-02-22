@@ -49,7 +49,6 @@ func (g *GoferMat) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	if err = g.Storage.RegisterUser(ctx, userID, request.Login, hashedPass); err != nil {
-		log.Print(err)
 		http.Error(w, "логин занят", http.StatusConflict)
 		return
 	}
@@ -121,10 +120,8 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
-		log.Print(orderList)
 
 		orderListChekStatus, dictOrderStatusForUpdateDB := loyaltysystem.CheckStatusOrder(orderList)
-		log.Println(orderListChekStatus)
 
 		g.Storage.UpdateOrderStatusInDB(ctx, dictOrderStatusForUpdateDB)
 
@@ -154,7 +151,6 @@ func (g *GoferMat) ListOrders(w http.ResponseWriter, r *http.Request) {
 		}
 
 		numOrderInt, err := strconv.Atoi(string(numOrder))
-		log.Println(numOrderInt)
 		if err != nil {
 			http.Error(w, "номер заказа не цифровой формат", http.StatusBadRequest)
 			return

@@ -14,7 +14,8 @@ func CheckStatusOrder(orderList []models.OrderStatus) ([]models.OrderStatus, map
 	dictOrderStatusForUpdateDB := make(map[string]models.OrderStatus)
 
 	for _, v := range orderList {
-		if v.Status != "INVALID" || v.Status != "PROCESSED" {
+
+		if v.Status != "INVALID" && v.Status != "PROCESSED" {
 
 			URLRequest := config.Config.AccrualSystem + "/api/orders/" + v.NumOrder
 			response, err := http.Get(URLRequest)
