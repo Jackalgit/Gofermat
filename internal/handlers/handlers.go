@@ -209,7 +209,9 @@ func (g *GoferMat) Balance(w http.ResponseWriter, r *http.Request) {
 
 	sumSumPoint := g.Storage.SumWithdrawn(ctx, userID)
 
-	balance := models.Balance{Current: sumAccurual, Withdrawn: sumSumPoint}
+	current := sumAccurual - sumSumPoint
+
+	balance := models.Balance{Current: current, Withdrawn: sumSumPoint}
 	log.Print(balance)
 
 	responsBalance, err := json.Marshal(balance)
@@ -255,6 +257,7 @@ func (g *GoferMat) Withdraw(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "номер заказа или сумма к списанию не передана", http.StatusBadRequest)
 		return
 	}
+	log.Println(withdrawRequest)
 
 	numOrderInt, err := strconv.Atoi(withdrawRequest.Order)
 	if err != nil {
@@ -275,7 +278,7 @@ func (g *GoferMat) Withdraw(w http.ResponseWriter, r *http.Request) {
 
 	sumAccurual := g.Storage.SumAccrual(ctx, userID)
 
-	if withdrawRequest.Sum == sumAccurual {
+	if withdrawRequest.Sum > sumAccurual {
 		http.Error(w, "на счету недостаточно средств", http.StatusPaymentRequired)
 		return
 
