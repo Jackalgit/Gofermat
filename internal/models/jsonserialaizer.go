@@ -11,7 +11,7 @@ type Withdraw struct {
 }
 
 type OrderStatus struct {
-	NumOrder   string  `json:"num_order"`
+	NumOrder   string  `json:"number"`
 	Status     string  `json:"status"`
 	Accrual    float64 `json:"accrual"`
 	UploadedAt string  `json:"uploaded_at"`
