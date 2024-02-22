@@ -14,16 +14,16 @@ func CheckStatusOrder(orderList []models.OrderStatus) ([]models.OrderStatus, map
 	dictOrderStatusForUpdateDB := make(map[string]models.OrderStatus)
 
 	for _, v := range orderList {
+		if v.Status != "INVALID" || v.Status != "PROCESSED" {
 
-		var statuaProces bool
-		statuaProces = v.Status != "INVALID" || v.Status != "PROCESSED"
-
-		if statuaProces {
 			URLRequest := config.Config.AccrualSystem + "/api/orders/" + v.NumOrder
 			response, err := http.Get(URLRequest)
 			if err != nil {
 				log.Printf("[Get], %q", err)
 				return nil, nil
+			}
+			if response.StatusCode == 204 {
+				continue
 			}
 
 			responsLoyaltySystem, err := jsondecoder.ResponsLoyaltySystem(response.Body)
